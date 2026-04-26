@@ -21,6 +21,7 @@ type Ctx = {
   prev: () => void;
   isOpen: boolean;
   hasTourForPath: boolean;
+  resetAll: () => void;
 };
 
 const TutorialCtx = createContext<Ctx | null>(null);
@@ -55,6 +56,9 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
     if (seen) return;
     // Tiny delay to ensure page mounted and data-tour targets exist
     const t = setTimeout(() => {
+      // Mark as seen on first auto-show so abandoning by navigation
+      // does not re-trigger the tour next time.
+      window.localStorage.setItem(flagKey(tourForPath.id), "1");
       setActiveTour(tourForPath);
       setStepIndex(0);
     }, 350);
@@ -97,6 +101,23 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
     if (stepIndex > 0) setStepIndex((i) => i - 1);
   }, [stepIndex]);
 
+  const resetAll = useCallback(() => {
+    if (typeof window === "undefined") return;
+    const keys: string[] = [];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith(FLAG_PREFIX)) keys.push(k);
+    }
+    keys.forEach((k) => window.localStorage.removeItem(k));
+    lastAutoTour.current = null;
+    // Trigger the tour for the current path right away if there is one
+    if (tourForPath) {
+      setActiveTour(tourForPath);
+      setStepIndex(0);
+      window.localStorage.setItem(flagKey(tourForPath.id), "1");
+    }
+  }, [tourForPath]);
+
   const value: Ctx = {
     activeTour,
     stepIndex,
@@ -106,6 +127,7 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
     prev,
     isOpen: !!activeTour,
     hasTourForPath: !!tourForPath,
+    resetAll,
   };
 
   return (

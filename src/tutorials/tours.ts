@@ -21,11 +21,10 @@ export const TOURS: Tour[] = [
     match: "/",
     steps: [
       {
-        target: "role-switcher",
-        title: "Tu rol vive aca arriba",
+        title: "Tu rol vive en Ajustes",
         body:
-          "Empresa, Particular o Visitante. Cambialo en cualquier momento — la app se adapta sola.",
-        placement: "left",
+          "Empresa o Particular. Cambialo desde el icono de Ajustes en la barra inferior — la app se adapta sola.",
+        placement: "center",
       },
       {
         target: "landing.first-card",
@@ -66,11 +65,10 @@ export const TOURS: Tour[] = [
         placement: "right",
       },
       {
-        target: "nav.explorar",
         title: "Siempre a un clic",
         body:
-          "El menu superior te lleva a Explorar y a tus entradas. Tu rol activo aparece a la derecha.",
-        placement: "bottom",
+          "La barra inferior tiene Explorar, Entradas, Eventos y Ajustes. Cambia de rol desde Ajustes para ver el panel de Empresa.",
+        placement: "center",
       },
     ],
   },

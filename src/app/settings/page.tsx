@@ -1,4 +1,5 @@
 import { RoleSwitcher } from "@/components/layout/RoleSwitcher";
+import { ResetTutorialsButton } from "@/components/tutorial/ResetTutorialsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,7 @@ export default function SettingsPage() {
       <header>
         <h1 className="text-2xl font-semibold text-ink-900">Ajustes</h1>
         <p className="mt-1 text-sm text-ink-500">
-          Cambia tu rol activo para probar cada flujo de la demo.
+          Cambia tu rol activo o vuelve a ver los tutoriales.
         </p>
       </header>
 
@@ -19,6 +20,16 @@ export default function SettingsPage() {
         </p>
         <div className="pt-1">
           <RoleSwitcher />
+        </div>
+      </section>
+
+      <section className="card space-y-3 p-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-400">Tutoriales</h2>
+        <p className="text-sm text-ink-600">
+          Los tutoriales aparecen automaticamente la primera vez que entras a cada pantalla. Si quieres volverlos a ver desde cero, resetea su historial.
+        </p>
+        <div className="pt-1">
+          <ResetTutorialsButton />
         </div>
       </section>
 
