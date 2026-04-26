@@ -48,9 +48,9 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-ink-100 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-ink-100 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
     >
-      <ul className="mx-auto flex max-w-md items-stretch justify-around">
+      <ul className="mx-auto flex max-w-3xl items-stretch justify-around">
         {items.map(({ href, label, Icon }) => {
           const active =
             href === "/empresa"

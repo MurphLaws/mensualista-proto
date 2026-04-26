@@ -21,13 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RoleHeaderBridge />
         <TutorialProvider>
           <Header />
-          <main className="container-app py-8 pb-28 md:pb-8">{children}</main>
-          <footer className="container-app mt-16 hidden border-t border-ink-100 py-8 text-sm text-ink-400 md:block">
-            <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-              <span>© {new Date().getFullYear()} Mensualista — proto demo.</span>
-              <span>Hecho para experimentar. No procesa pagos reales.</span>
-            </div>
-          </footer>
+          <main className="container-app py-8 pb-28">{children}</main>
           <BottomNav />
         </TutorialProvider>
       </body>
