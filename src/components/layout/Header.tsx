@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TutorialReplayButton } from "@/components/tutorial/TutorialReplayButton";
+import { RoleSwitcher } from "./RoleSwitcher";
 
 export function Header() {
   return (
@@ -14,6 +15,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <TutorialReplayButton />
+          <RoleSwitcher />
         </div>
       </div>
     </header>
