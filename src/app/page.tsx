@@ -5,6 +5,8 @@ import { Stat } from "@/components/ui/Stat";
 import { db } from "@/lib/db";
 import { ListingCard } from "@/components/listings/ListingCard";
 
+export const dynamic = "force-dynamic";
+
 export default async function LandingPage() {
   const featured = await db.listing.findMany({
     take: 3,
