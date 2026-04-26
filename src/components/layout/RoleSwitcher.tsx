@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, User2, Building2, Sparkles } from "lucide-react";
+import { ChevronDown, Building2, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ROLE_LABEL, ROLE_SUBTITLE, type Role } from "@/lib/role-shared";
 import { getClientRole, onRoleChange, setClientRole } from "@/lib/role-client";
@@ -9,12 +9,11 @@ import { cn } from "@/lib/cn";
 const ICONS: Record<Role, React.ReactNode> = {
   EMPRESA: <Building2 size={16} />,
   PARTICULAR: <Sparkles size={16} />,
-  VISITANTE: <User2 size={16} />,
 };
 
 export function RoleSwitcher() {
   const router = useRouter();
-  const [role, setRoleState] = useState<Role>("VISITANTE");
+  const [role, setRoleState] = useState<Role>("PARTICULAR");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

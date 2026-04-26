@@ -18,7 +18,7 @@ export function ListingActionButton({
   title: string;
 }) {
   const router = useRouter();
-  const [role, setRole] = useState<Role>("VISITANTE");
+  const [role, setRole] = useState<Role>("PARTICULAR");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -47,10 +47,10 @@ export function ListingActionButton({
     router.push(`/checkout/${listingId}`);
   }
 
-  if (role !== "VISITANTE") {
+  if (role !== "PARTICULAR") {
     return (
       <div className="card p-5 text-sm text-ink-500" data-tour="listing.cta">
-        Para inscribirte o comprar, cambia tu rol a <strong className="text-ink-700">{ROLE_LABEL.VISITANTE}</strong> desde la barra superior.
+        Para inscribirte o comprar, cambia tu rol a <strong className="text-ink-700">{ROLE_LABEL.PARTICULAR}</strong> desde la barra superior.
       </div>
     );
   }

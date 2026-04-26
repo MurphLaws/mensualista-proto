@@ -10,10 +10,6 @@ import { RoleSwitcher } from "./RoleSwitcher";
 import { TutorialReplayButton } from "@/components/tutorial/TutorialReplayButton";
 
 const NAV_BY_ROLE: Record<Role, { href: string; label: string }[]> = {
-  VISITANTE: [
-    { href: "/explorar", label: "Explorar" },
-    { href: "/mis-entradas", label: "Mis entradas" },
-  ],
   EMPRESA: [
     { href: "/explorar", label: "Explorar" },
     { href: "/empresa", label: "Panel" },
@@ -21,13 +17,14 @@ const NAV_BY_ROLE: Record<Role, { href: string; label: string }[]> = {
   ],
   PARTICULAR: [
     { href: "/explorar", label: "Explorar" },
+    { href: "/mis-entradas", label: "Mis entradas" },
     { href: "/particular", label: "Mis eventos" },
   ],
 };
 
 export function Header() {
   const pathname = usePathname();
-  const [role, setRole] = useState<Role>("VISITANTE");
+  const [role, setRole] = useState<Role>("PARTICULAR");
 
   useEffect(() => {
     setRole(getClientRole());

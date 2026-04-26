@@ -4,10 +4,11 @@ import { randomUUID } from "node:crypto";
 const db = new PrismaClient();
 
 async function main() {
-  await db.scan.deleteMany();
-  await db.ticket.deleteMany();
-  await db.listing.deleteMany();
-  await db.user.deleteMany();
+  const existing = await db.user.count();
+  if (existing > 0) {
+    console.log(`Seed skip: ${existing} usuarios ya presentes.`);
+    return;
+  }
 
   const aurora = await db.user.create({
     data: {
@@ -23,14 +24,6 @@ async function main() {
       id: "u_particular_carla",
       name: "Carla Mendez",
       role: "PARTICULAR",
-    },
-  });
-
-  const julian = await db.user.create({
-    data: {
-      id: "u_visitante_julian",
-      name: "Julian Soto",
-      role: "VISITANTE",
     },
   });
 
@@ -79,6 +72,19 @@ async function main() {
         priceCents: 3500,
       },
       {
+        id: "l_yoga_past",
+        type: "CLASE",
+        ownerId: aurora.id,
+        title: "Yoga restaurativo (pasada)",
+        description:
+          "Sesion ya realizada. Sirve para mostrar el historico de scans y entradas redimidas.",
+        coverUrl: "/covers/yoga.svg",
+        location: "Estudio Aurora — Sala 1, Palermo",
+        startsAt: days(-3),
+        capacity: 15,
+        priceCents: 4000,
+      },
+      {
         id: "l_pack5",
         type: "PACK",
         ownerId: aurora.id,
@@ -118,21 +124,77 @@ async function main() {
         capacity: 20,
         priceCents: 0,
       },
+      {
+        id: "l_taller_arte",
+        type: "EVENTO",
+        ownerId: carla.id,
+        title: "Taller de acuarelas para principiantes",
+        description:
+          "Llevamos pinceles y papel. Ideal para arrancar con acuarelas. Cupo reducido para acompañar bien.",
+        coverUrl: "/covers/picnic.svg",
+        location: "Centro Cultural Norte",
+        startsAt: days(8),
+        capacity: 10,
+        priceCents: 0,
+      },
     ],
   });
 
-  // Pre-issue a sample free ticket so the wallet is not empty
+  // Sample tickets for Carla (PARTICULAR) — cover all states so wallet is rich
+  // 1) ACTIVE paid class
+  await db.ticket.create({
+    data: {
+      code: randomUUID(),
+      listingId: "l_yoga",
+      holderId: carla.id,
+      status: "ACTIVE",
+      remainingUses: 1,
+      paymentRef: "demo_pay_yoga",
+    },
+  });
+  // 2) ACTIVE free event
   await db.ticket.create({
     data: {
       code: randomUUID(),
       listingId: "l_picnic",
-      holderId: julian.id,
+      holderId: carla.id,
       status: "ACTIVE",
       remainingUses: 1,
     },
   });
+  // 3) ACTIVE pack with multiple remaining uses
+  await db.ticket.create({
+    data: {
+      code: randomUUID(),
+      listingId: "l_pack5",
+      holderId: carla.id,
+      status: "ACTIVE",
+      remainingUses: 5,
+      paymentRef: "demo_pay_pack",
+    },
+  });
+  // 4) REDEEMED past class with one OK scan, so empresa stats and history are non-empty
+  const redeemed = await db.ticket.create({
+    data: {
+      code: randomUUID(),
+      listingId: "l_yoga_past",
+      holderId: carla.id,
+      status: "REDEEMED",
+      remainingUses: 0,
+      paymentRef: "demo_pay_past",
+    },
+  });
+  await db.scan.create({
+    data: {
+      ticketId: redeemed.id,
+      scannedById: aurora.id,
+      result: "OK",
+    },
+  });
 
-  console.log("Seed listo. Listings:", await db.listing.count());
+  console.log(
+    `Seed listo. Users: ${await db.user.count()}, Listings: ${await db.listing.count()}, Tickets: ${await db.ticket.count()}, Scans: ${await db.scan.count()}.`,
+  );
 }
 
 main()

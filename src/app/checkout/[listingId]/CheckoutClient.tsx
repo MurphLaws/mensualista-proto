@@ -22,23 +22,23 @@ export function CheckoutClient({
   const [needsRole, setNeedsRole] = useState(false);
 
   useEffect(() => {
-    if (getClientRole() !== "VISITANTE") setNeedsRole(true);
+    if (getClientRole() !== "PARTICULAR") setNeedsRole(true);
   }, []);
 
   if (needsRole) {
     return (
       <div className="card p-5 space-y-3 text-sm">
         <p className="text-ink-700">
-          El checkout es para visitantes. Cambia tu rol para continuar la demo.
+          El checkout es para particulares. Cambia tu rol para continuar la demo.
         </p>
         <Button
           onClick={() => {
-            setClientRole("VISITANTE");
+            setClientRole("PARTICULAR");
             setNeedsRole(false);
             router.refresh();
           }}
         >
-          Cambiar a Visitante y continuar
+          Cambiar a Particular y continuar
         </Button>
       </div>
     );

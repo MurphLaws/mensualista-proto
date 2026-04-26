@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "prisma db push --accept-data-loss --skip-generate && next start",
+    "start": "prisma db push --accept-data-loss --skip-generate && tsx prisma/seed.ts && next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push && npm run db:seed",
@@ -19,10 +19,12 @@
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.460.0",
     "next": "^15.1.0",
+    "prisma": "^5.22.0",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
@@ -31,9 +33,7 @@
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.14",
-    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
 }

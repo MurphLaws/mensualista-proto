@@ -11,7 +11,7 @@ export {
 } from "./role-shared";
 
 function isRole(v: unknown): v is Role {
-  return v === "EMPRESA" || v === "PARTICULAR" || v === "VISITANTE";
+  return v === "EMPRESA" || v === "PARTICULAR";
 }
 
 export async function getActiveRoleFromHeaders(): Promise<Role> {
@@ -21,7 +21,7 @@ export async function getActiveRoleFromHeaders(): Promise<Role> {
   const c = await cookies();
   const fromCookie = c.get("mensualista_role")?.value;
   if (isRole(fromCookie)) return fromCookie;
-  return "VISITANTE";
+  return "PARTICULAR";
 }
 
 export async function getActiveUser() {
