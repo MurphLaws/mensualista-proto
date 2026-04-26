@@ -1,0 +1,75 @@
+// Mensualista proto schema (SQLite)
+// SQLite has no enums, so we use string fields with literal types in TypeScript.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  role         String   // "PARTICULAR" | "EMPRESA" | "VISITANTE"
+  companyName  String?
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  listings     Listing[] @relation("ownerListings")
+  tickets      Ticket[]  @relation("holderTickets")
+  scans        Scan[]    @relation("scannerScans")
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  type        String   // "EVENTO" | "CLASE" | "PACK"
+  ownerId     String
+  owner       User     @relation("ownerListings", fields: [ownerId], references: [id])
+  title       String
+  description String
+  coverUrl    String?
+  location    String
+  startsAt    DateTime
+  capacity    Int
+  priceCents  Int      @default(0)
+  packSize    Int?     // only set when type = "PACK"
+  createdAt   DateTime @default(now())
+
+  tickets     Ticket[]
+
+  @@index([type])
+  @@index([ownerId])
+}
+
+model Ticket {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  listingId     String
+  listing       Listing  @relation(fields: [listingId], references: [id])
+  holderId      String
+  holder        User     @relation("holderTickets", fields: [holderId], references: [id])
+  status        String   // "ACTIVE" | "REDEEMED" | "EXHAUSTED"
+  remainingUses Int      @default(1)
+  paymentRef    String?
+  purchasedAt   DateTime @default(now())
+
+  scans         Scan[]
+
+  @@index([listingId])
+  @@index([holderId])
+}
+
+model Scan {
+  id           String   @id @default(cuid())
+  ticketId     String
+  ticket       Ticket   @relation(fields: [ticketId], references: [id])
+  scannedById  String
+  scannedBy    User     @relation("scannerScans", fields: [scannedById], references: [id])
+  result       String   // "OK" | "DUP" | "INVALID" | "EXHAUSTED"
+  scannedAt    DateTime @default(now())
+
+  @@index([ticketId])
+}
